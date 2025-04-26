@@ -1,3 +1,4 @@
+import { HomeDetailsResponse } from 'homeManager';
 import { NativeModules, Platform } from 'react-native';
 import { DeviceDps } from './device';
 
@@ -25,7 +26,7 @@ export type GetHomeDetailParams = {
 export type DeviceDetailResponse = {
   homeId: number;
   isOnline: boolean;
-  isLocalOnline: boolean; 
+  isLocalOnline: boolean;
   cloudOnline: boolean;
   productId: string;
   category: string; // e.g. "dj"
@@ -38,8 +39,17 @@ export type DeviceDetailResponse = {
   homeDisplayOrder: number;
   roomId: number;
 };
-export type GetHomeDetailResponse = {
+
+export type RoomBean = {
+  name: string;
+  displayOrder: number;
+  id: number;
+  roomId: number;
+  background: string;
+};
+export type GetHomeDetailResponse = HomeDetailsResponse & {
   deviceList: DeviceDetailResponse[];
+  rooms: any[];
   groupList: any[];
   meshList: any[];
   sharedDeviceList: any[];
@@ -56,7 +66,7 @@ export async function getHomeDetail(
     home.deviceList = home.deviceList.map((device: any) => ({
       ...device,
       homeId: parseInt(device.ownerId),
-      category: device.deviceCategory
+      category: device.deviceCategory,
     }));
   }
 
@@ -90,4 +100,13 @@ export type SortRoomsParams = {
 
 export function sortRoom(params: SortRoomsParams): Promise<string> {
   return tuya.sortRoom(params);
+}
+
+export type AddRoomParams = {
+  homeId: number;
+  name: string;
+};
+
+export function addRoom(params: AddRoomParams): Promise<string> {
+  return tuya.addRoom(params);
 }

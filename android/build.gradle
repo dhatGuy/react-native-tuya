@@ -11,17 +11,17 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath 'com.android.tools.build:gradle:8.7.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion 23
+        minSdk 23
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
@@ -32,14 +32,15 @@ android {
             abiFilters "armeabi-v7a","arm64-v8a"
         }
 
-        //load the Tuya secrets from local.properties file
-        def secretsFile = file("local.properties")
-        def properties = new Properties()
-        properties.load(new FileInputStream(secretsFile))
+      // Modified to look for local.properties in the project root
+      def rootDir = project.rootProject.rootDir
+      def secretsFile = new File(rootDir, "local.properties")
+      def properties = new Properties()
+      properties.load(new FileInputStream(secretsFile))
 
-        //fetch the keys
-        def appKey = properties.getProperty("THING_SMART_APPKEY") ?: ""
-        def secret = properties.getProperty("THING_SMART_SECRET") ?: ""
+      //fetch the keys
+      def appKey = properties.getProperty("THING_SMART_APPKEY") ?: ""
+      def secret = properties.getProperty("THING_SMART_SECRET") ?: ""
 
         //inject the key dynamically into the manifest
         manifestPlaceholders = [
@@ -67,7 +68,7 @@ android {
     }
 }
 
-configurations.all {
+configurations.configureEach {
   exclude group: "com.thingclips.smart", module: 'thingsmart-modularCampAnno'
 }
 
@@ -76,8 +77,8 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.67.android'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.9'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
-    implementation 'com.thingclips.smart:thingsmart:6.2.1'
-    implementation 'com.facebook.soloader:soloader:0.10.4+'
+    implementation 'com.thingclips.smart:thingsmart:6.2.2'
+    implementation 'com.facebook.soloader:soloader:0.10.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.react:react-android:0.76.6'
     implementation 'com.facebook.react:hermes-android:0.76.6'
@@ -92,7 +93,7 @@ repositories {
     google()
     mavenCentral()
     maven { url 'https://maven-other.tuya.com/repository/maven-releases/' }
-    maven { 
+    maven {
       url "https://maven-other.tuya.com/repository/maven-commercial-releases/"
       mavenContent {
         releasesOnly()
@@ -110,7 +111,7 @@ repositories {
 allprojects {
   repositories {
     maven { url 'https://maven-other.tuya.com/repository/maven-releases/' }
-    maven { 
+    maven {
       url "https://maven-other.tuya.com/repository/maven-commercial-releases/"
       mavenContent {
         releasesOnly()

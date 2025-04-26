@@ -1,3 +1,4 @@
+import { HomeDetailsResponse } from 'homeManager';
 import { DeviceDps } from './device';
 export declare type QueryRoomListParams = {
     homeId?: number;
@@ -28,8 +29,16 @@ export declare type DeviceDetailResponse = {
     homeDisplayOrder: number;
     roomId: number;
 };
-export declare type GetHomeDetailResponse = {
+export declare type RoomBean = {
+    name: string;
+    displayOrder: number;
+    id: number;
+    roomId: number;
+    background: string;
+};
+export declare type GetHomeDetailResponse = HomeDetailsResponse & {
     deviceList: DeviceDetailResponse[];
+    rooms: any[];
     groupList: any[];
     meshList: any[];
     sharedDeviceList: any[];
@@ -53,3 +62,8 @@ export declare type SortRoomsParams = {
     homeId: number;
 };
 export declare function sortRoom(params: SortRoomsParams): Promise<string>;
+export declare type AddRoomParams = {
+    homeId: number;
+    name: string;
+};
+export declare function addRoom(params: AddRoomParams): Promise<string>;

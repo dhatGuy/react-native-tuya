@@ -1,5 +1,10 @@
 import { Platform, NativeModules, NativeEventEmitter } from 'react-native';
 
+/**
+ * Initiate the activation process.
+ * @param {InitActivatorParams} params The parameters for the activation process.
+ * @returns {Promise<DeviceDetailResponse>} A promise that resolves to a device object.
+ */
 var initActivator = function initActivator(params) {
   try {
     return Promise.resolve(tuya.initActivator(params)).then(function (device) {
@@ -14,9 +19,16 @@ var initActivator = function initActivator(params) {
     return Promise.reject(e);
   }
 };
+/**
+ * Stop the activation process.
+ */
 var tuya = NativeModules.TuyaActivatorModule;
 var tuyaBLEActivator = NativeModules.TuyaBLEActivatorModule;
 var tuyaBLEScanner = NativeModules.TuyaBLEScannerModule;
+/**
+ * Open the system network settings.
+ * @returns void
+ */
 function openNetworkSettings() {
   return tuya.openNetworkSettings({});
 }
@@ -30,21 +42,37 @@ var ActivatorType;
 function stopActivator() {
   return tuya.stopActivator();
 }
+/**
+ * Destroy the activator.
+ */
 function destroyActivator() {
   return tuya.destroyActivator();
 }
 function startBluetoothScan() {
+  /**
+   * Start the Bluetooth scan.
+   */
   if (Platform.OS === 'ios') {
     return tuyaBLEScanner.startBluetoothScan();
   }
   return tuya.startBluetoothScan();
 }
+/**
+ * Initiate the Bluetooth dual mode activation process.
+ * @param {InitBluetoothActivatorParams} params The parameters for the activation process.
+ * @returns {Promise<DeviceBean>} A promise that resolves to a device object.
+ */
 function initBluetoothDualModeActivator(params) {
   if (Platform.OS === 'ios') {
     return tuyaBLEActivator.initActivator(params);
   }
   return tuya.initBluetoothDualModeActivator(params);
 }
+/**
+ * Get the current Wi-Fi SSID.
+ * @param success A callback that is called with the Wi-Fi SSID.
+ * @param error A callback that is called when there is an error.
+ */
 function getCurrentWifi(success, error) {
   // We need the Allow While Using App location permission to use this.
   return tuya.getCurrentWifi({}, success, error);
@@ -139,6 +167,9 @@ function dismissHome(params) {
 }
 function sortRoom(params) {
   return tuya$2.sortRoom(params);
+}
+function addRoom(params) {
+  return tuya$2.addRoom(params);
 }
 
 var tuya$3 = NativeModules.TuyaHomeDataManagerModule;
@@ -316,5 +347,5 @@ var ValidateCodeType;
   ValidateCodeType[ValidateCodeType["RESET_PASSWORD"] = 3] = "RESET_PASSWORD";
 })(ValidateCodeType || (ValidateCodeType = {}));
 
-export { ActivatorType, DEVLISTENER, GROUPLISTENER, HARDWAREUPGRADELISTENER, HOMECHANGE, HOMESTATUS, SINGLETRANSFER, SUBDEVLISTENER, ValidateCodeType, addEvent, addMember, addTimerWithTask, bridge, cancelAccount, checkValidateCode, createHome, destroyActivator, dismissHome, getAllTimerWithDeviceId, getCurrentUser, getCurrentWifi, getDataPointStat, getHomeDetail, getOtaInfo, getRoomDeviceList, getTimerTaskStatusWithDeviceId, getTimerWithTask, getValidateCode, initActivator, initBluetoothDualModeActivator, joinFamily, loginOrRegisterWithUid, loginWithEmailPassword, logout, openNetworkSettings, queryHomeList, queryMemberList, queryRoomList, registerAccountWithEmail, registerDevListener, removeDevice, removeMember, removeTimerWithTask, renameDevice, resetEmailPassword, send, sortRoom, startBluetoothScan, startOta, stopActivator, unRegisterAllDevListeners, updateHome, updateTimerStatusWithTask, updateTimerTaskStatusWithTask, updateTimerWithTask };
+export { ActivatorType, DEVLISTENER, GROUPLISTENER, HARDWAREUPGRADELISTENER, HOMECHANGE, HOMESTATUS, SINGLETRANSFER, SUBDEVLISTENER, ValidateCodeType, addEvent, addMember, addRoom, addTimerWithTask, bridge, cancelAccount, checkValidateCode, createHome, destroyActivator, dismissHome, getAllTimerWithDeviceId, getCurrentUser, getCurrentWifi, getDataPointStat, getHomeDetail, getOtaInfo, getRoomDeviceList, getTimerTaskStatusWithDeviceId, getTimerWithTask, getValidateCode, initActivator, initBluetoothDualModeActivator, joinFamily, loginOrRegisterWithUid, loginWithEmailPassword, logout, openNetworkSettings, queryHomeList, queryMemberList, queryRoomList, registerAccountWithEmail, registerDevListener, removeDevice, removeMember, removeTimerWithTask, renameDevice, resetEmailPassword, send, sortRoom, startBluetoothScan, startOta, stopActivator, unRegisterAllDevListeners, updateHome, updateTimerStatusWithTask, updateTimerTaskStatusWithTask, updateTimerWithTask };
 //# sourceMappingURL=react-native-tuya.esm.js.map
